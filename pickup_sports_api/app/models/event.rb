@@ -10,7 +10,7 @@ class Event < ApplicationRecord
   has_one :location, as: :locationable, dependent: :destroy
   has_many :comments, as: :commentable, dependent: :destroy
 
-  has_many :event_participants
+  has_many :event_participants, dependent: :destroy
   has_many :users, through: :event_participants
 
   has_and_belongs_to_many :sports
