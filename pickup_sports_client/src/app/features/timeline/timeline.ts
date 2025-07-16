@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Post } from '../../shared/models/post';
 import { PostComponent } from '../../shared/components/posts/post/post';
+import { PostService } from '../../core/services/post';
 
 @Component({
   selector: 'app-timeline',
@@ -9,21 +10,19 @@ import { PostComponent } from '../../shared/components/posts/post/post';
   templateUrl: './timeline.html',
   styleUrl: './timeline.scss'
 })
-export class Timeline {
-  posts: Post[] = [
-    new Post({
-      id: 1,
-      title: "Post 1",
-      content: "Content 1",
-      created_at: "2021-01-01",
-      user: {
-        first_name: "John",
-        last_name: "Doe",
-        email: "email@email.com",
-        username: "johndoe123"
+export class Timeline implements OnInit {
+  posts: Post[] = [];
+
+  constructor(private postService:PostService) {}
+
+  ngOnInit(): void {
+    this.postService.getTimelinePosts().subscribe({
+      next: (posts: Post[]) => {
+        this.posts = posts;
+      },
+      error: (error:any) => {
+        console.error('Error fetching timeline posts', error);
       }
     })
-  ];
-
-  constructor(){}
+  }
 }
